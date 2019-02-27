@@ -1,3 +1,17 @@
+/*
+ *调用函数 int TimeDomainChangeDetection(Mat srcImg1, Mat srcImg2, double Matrix[][3]);
+ *srcImg1为前第N帧，srcImg2为当前帧
+ *Matrix矩阵为变换参数矩阵
+ * [ a1, b1, c1 ]
+ * [ a2, b2, c2 ]
+ * [ 0,  0,  1  ]
+ *假设前第N帧图像中某个像素点坐标为(x,y)，当前帧中该像素点的坐标记为(x_3, y_3)
+ *  [ x_3 ] = [ a1, b1, c1 ][ x ]
+ *则[ y_3 ] = [ a2, b2, c2 ][ y ]
+ *  [  1  ] = [ 0,  0,  1  ][ 1 ]
+ *可于"pch.h"文件中加入__TEST宏定义，运行后可见匹配图片以及所得变换参数矩阵以及变换参数矩阵对特征点的匹配情况，匹配情况一般较差，暂时没有找到解决办法
+ */
+
 #include "pch.h"
 #include "ransac.h"
 #include "SurfMatch.h"
@@ -20,6 +34,9 @@ void paint_white(Mat img, double y, double x) {
 
 int TimeDomainChangeDetection(Mat srcImg1, Mat srcImg2, double Matrix[][3])
 {
+#ifdef __TEST
+	system("color 2F");
+#endif // __TEST
 	//Mat tmpImg;
 	//system("color 2F");
 	//Mat srcImg1 = imread("E:\\5.jpg", 0);
@@ -42,18 +59,22 @@ int TimeDomainChangeDetection(Mat srcImg1, Mat srcImg2, double Matrix[][3])
 	if (!ransac(num, Nx, Ny, Nx_3, Ny_3, Matrix)) {
 		cout << "error" << endl;
 	}
-	imshow("SrcImg1", srcImg1);
-	imshow("SrcImg2", srcImg2);
+	//imshow("SrcImg1", srcImg1);
+	//imshow("SrcImg2", srcImg2);
 	for (int i = 0; i < num; i++) {
 		paint_white(srcImg1, Nx[i], Ny[i]);
 		double x_3, y_3;
 		x_3 = Matrix[0][0] * Nx[i] + Matrix[0][1] * Ny[i] + Matrix[0][2];
 		y_3 = Matrix[1][0] * Nx[i] + Matrix[1][1] * Ny[i] + Matrix[1][2];
 		paint_white(srcImg2, x_3, y_3);
-		cout << "aim x: " << Nx_3[i] << " act x: " << x_3 << " aim y : " << Ny_3[i] << " act y: " << y_3 << endl;
+		//cout << "aim x: " << Nx_3[i] << " act x: " << x_3 << " aim y : " << Ny_3[i] << " act y: " << y_3 << endl;
 	}
+#ifdef __TEST
 	imshow("ChangedImg1", srcImg1);
 	imshow("ChangedImg2", srcImg2);
+	//imwrite("E:\\ChangedImg1.jpg", srcImg1);
+	//imwrite("E:\\ChangedImg2.jpg", srcImg2);
+
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			cout << Matrix[i][j] << " ";
@@ -61,5 +82,6 @@ int TimeDomainChangeDetection(Mat srcImg1, Mat srcImg2, double Matrix[][3])
 		cout << endl;
 	}
 	waitKey(0);
+#endif // __TEST
 	return 1;
 }

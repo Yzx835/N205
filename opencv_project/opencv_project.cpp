@@ -1,24 +1,27 @@
-﻿// opencv_project.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
+﻿/*
+ *调用函数 int TimeDomainChangeDetection(Mat srcImg1, Mat srcImg2, double Matrix[][3]); 
+ *srcImg1为前第N帧，srcImg2为当前帧
+ *Matrix矩阵为变换参数矩阵
+ * [ a1, b1, c1 ]
+ * [ a2, b2, c2 ]
+ * [ 0,  0,  1  ]
+ *假设前第N帧图像中某个像素点坐标为(x,y)，当前帧中该像素点的坐标记为(x_3, y_3)
+ *  [ x_3 ] = [ a1, b1, c1 ][ x ]
+ *则[ y_3 ] = [ a2, b2, c2 ][ y ]
+ *  [  1  ] = [ 0,  0,  1  ][ 1 ]  
+ *可于"pch.h"文件中加入__TEST宏定义，运行后可见匹配图片以及所得变换参数矩阵以及变换参数矩阵对特征点的匹配情况，匹配情况一般较差，暂时没有找到解决办法
+ */
 
 #include "pch.h"
 #include "ransac.h"
 #include "SurfMatch.h"
 #include "TimeDomainChangeDetection.h"
-/*#include<cstdlib>
-#include<opencv2/core/core.hpp>
-#include<opencv2/highgui/highgui.hpp>
-#include<opencv2/xfeatures2d/nonfree.hpp>
-#include<iostream>*
-
-using namespace std;
-using namespace cv;
-using namespace cv::xfeatures2d;*/
-
 
 int main()
 {
-	system("color 2F");
+
+
+	
 	Mat srcImg1 = imread("E:\\3.png", 1);
 	Mat srcImg2 = imread("E:\\4.png", 1); 
 

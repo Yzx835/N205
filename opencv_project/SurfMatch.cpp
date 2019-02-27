@@ -36,8 +36,8 @@ int SurfMatch(Mat srcImg1, Mat srcImg2, double Nx[], double Ny[], double N_3x[],
 		if (dist > Max_dist)
 			Max_dist = dist;
 	}
-	cout << "最短距离" << Min_dist << endl;
-	cout << "最长距离" << Max_dist << endl;
+	//cout << "最短距离" << Min_dist << endl;
+	//cout << "最长距离" << Max_dist << endl;
 	vector<DMatch>goodmaches;
 	for (int i = 0; i < dstImg1.rows && num <= 100000; i++){
 		if (matches[i].distance < dist_large * Min_dist && matches[i].distance < Max_dist / 3) {
@@ -48,20 +48,22 @@ int SurfMatch(Mat srcImg1, Mat srcImg2, double Nx[], double Ny[], double N_3x[],
 			Ny[num] = keypoints1[square1].pt.y;
 			N_3x[num] = keypoints2[square2].pt.x;
 			N_3y[num++] = keypoints2[square2].pt.y;
-			cout << keypoints1[square1].pt.x << " " << keypoints1[square1].pt.y << " " << keypoints2[square2].pt.x << " " << keypoints2[square2].pt.y << endl;
+			//cout << keypoints1[square1].pt.x << " " << keypoints1[square1].pt.y << " " << keypoints2[square2].pt.x << " " << keypoints2[square2].pt.y << endl;
 		}
 	}
 	Mat imgMaches;
 	drawMatches(srcImg1, keypoints1, srcImg2, keypoints2, goodmaches, imgMaches);
 	//drawMatches(srcImg2, keypoints2, srcImg1, keypoints1, goodmaches, imgMaches);
-	for (int i = 0; i < goodmaches.size(); i++)
-	{
+	//for (int i = 0; i < goodmaches.size(); i++)
+	//{
 //		cout << "符合条件的匹配：" << goodmaches[i].queryIdx << "--" << goodmaches[i].trainIdx << endl;
-	}
+	//}
 	//imshow("原图1", srcImg1);
 	//imshow("原图2", srcImg2);
+#ifdef __TEST
 	imshow("匹配效果", imgMaches);
-
+#endif // __TEST
+	//imwrite("E:\\imgMatches.jpg", imgMaches);
 	//waitKey(0);
 	return num;
 }
